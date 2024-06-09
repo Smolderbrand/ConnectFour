@@ -1,8 +1,9 @@
-var currentPlayer;
-var gameState;
-var counts = [];
-var state = [[]];
-var moves;
+let currentPlayer;
+let gameState;
+let counts = [];
+let state = [[]];
+let moves;
+let player = ["O", "X", "O"];
 
 function start() {
 	currentPlayer = 0;
@@ -10,111 +11,99 @@ function start() {
 	counts = [0, 0, 0, 0, 0, 0, 0];
 	state = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]];
 	moves = 0;
+	let navButtons = document.getElementById("Buttons");
+	let currenttr;
+	navButtons.innerHTML = "";
+	for (let i = 0; i < 7; ++i) {
+		currenttr = document.createElement("tr");
+		for (let j = 0; j < 7; ++j) {
+			let currenttd = document.createElement("td");
+			let button = document.createElement("button");
+			button.setAttribute("buttonid", j);
+			button.setAttribute("style", "height:40px;width:40px;font-family:Arial;font-size:18px;");
+			if (i > 0) {
+				button.innerHTML = " ";
+			} else {
+				button.innerHTML = "&#8595;"
+				button.addEventListener("click", function (event) {
+					let btn = event.target;
+					let buttonid = btn.getAttribute("buttonid");
+					buttonClicked(buttonid);
+				});
+			}
+			currenttd.appendChild(button);
+			currenttr.appendChild(currenttd);
+		}
+		navButtons.appendChild(currenttr);
+	}
 }
 
 function clickNew() {
 	currentPlayer = 0;
 	gameState = 0;
 	counts = [0, 0, 0, 0, 0, 0, 0];
-	for (var i = 0; i < 6; i++)
-		for (var j = 0; j < 7; j++) {
-			state[i][j] = 0;
-			document.getElementById("button" + String.fromCharCode(65 + j) + String.fromCharCode(65 + i)).textContent = " ";
+	for (let i = 1; i < 7; ++i) {
+		for (let j = 0; j < 7; ++j) {
+			state[i - 1][j] = 0;
+			document.getElementById("Buttons").children[i].children[j].children[0].textContent = " ";
 		}
+	}
 	moves = 0;
 	checkState();
 }
 
 function checkState() {
-	if (currentPlayer === 0)
-		document.getElementById("GameStats").textContent = "X to click";
-	else
-		document.getElementById("GameStats").textContent = "O to click";
-	for (var i = 0; i < 3; ++i)
-		for (var j = 0; j < 7; ++j)
+	document.getElementById("GameStats").textContent = player[currentPlayer + 1] + " to click";
+	for (let i = 0; i < 3; ++i) {
+		for (let j = 0; j < 7; ++j) {
 			if (state[i][j] === state[i + 1][j] && state[i][j] === state[i + 2][j] && state[i][j] === state[i + 3][j]) {
-				if (state[i][j] == 1)
-					document.getElementById("GameStats").textContent = "X has won!";
-				else if (state[i][j] == 2)
-					document.getElementById("GameStats").textContent = "O has won!";
-				if (state[i][j] > 0)
+				if (state[i][j] > 0) {
+					document.getElementById("GameStats").textContent = player[state[i][j]] + " has won!";
 					gameState = 1;
+				}
 			}
-	for (var i = 0; i < 6; ++i)
-		for (var j = 0; j < 4; ++j)
+		}
+	}
+	for (let i = 0; i < 6; ++i) {
+		for (let j = 0; j < 4; ++j) {
 			if (state[i][j] === state[i][j + 1] && state[i][j] === state[i][j + 2] && state[i][j] === state[i][j + 3]) {
-				if (state[i][j] == 1)
-					document.getElementById("GameStats").textContent = "X has won!";
-				else if (state[i][j] == 2)
-					document.getElementById("GameStats").textContent = "O has won!";
-				if (state[i][j] > 0)
+				if (state[i][j] > 0) {
+					document.getElementById("GameStats").textContent = player[state[i][j]] + " has won!";
 					gameState = 1;
+				}
 			}
-	for (var i = 0; i < 3; ++i)
-		for (var j = 0; j < 4; ++j)
+		}
+	}
+	for (let i = 0; i < 3; ++i) {
+		for (let j = 0; j < 4; ++j) {
 			if (state[i][j] === state[i + 1][j + 1] && state[i][j] === state[i + 2][j + 2] && state[i][j] === state[i + 3][j + 3]) {
-				if (state[i][j] == 1)
-					document.getElementById("GameStats").textContent = "X has won!";
-				else if (state[i][j] == 2)
-					document.getElementById("GameStats").textContent = "O has won!";
-				if (state[i][j] > 0)
+				if (state[i][j] > 0) {
+					document.getElementById("GameStats").textContent = player[state[i][j]] + " has won!";
 					gameState = 1;
+				}
 			}
-	for (var i = 0; i < 3; i++)
-		for (var j = 0; j < 4; j++)
+		}
+	}
+	for (let i = 0; i < 3; i++) {
+		for (let j = 0; j < 4; j++) {
 			if (state[i][j + 3] === state[i + 1][j + 2] && state[i][j + 3] === state[i + 2][j + 1] && state[i][j + 3] === state[i + 3][j]) {
-				if (state[i][j + 3] == 1)
-					document.getElementById("GameStats").textContent = "X has won!";
-				else if (state[i][j + 3] == 2)
-					document.getElementById("GameStats").textContent = "O has won!";
-				if (state[i][j + 3] > 0)
+				if (state[i][j + 3] > 0) {
+					document.getElementById("GameStats").textContent = player[state[i][j + 3]] + " has won!";
 					gameState = 1;
+				}
 			}
+		}
+	}
 	if ((gameState === 0) && (moves == 42))
 		document.getElementById("GameStats").textContent = "Draw!";
 }
 
-function clickA() {
-	wrapperButton(0);
-}
-
-function clickB() {
-	wrapperButton(1);
-}
-
-function clickC() {
-	wrapperButton(2);
-}
-
-function clickD() {
-	wrapperButton(3);
-}
-
-function clickE() {
-	wrapperButton(4);
-}
-
-function clickF() {
-	wrapperButton(5);
-}
-
-function clickG() {
-	wrapperButton(6);
-}
-
-function wrapperButton(number) {
+function buttonClicked(number) {
 	if ((counts[number] < 6) && (gameState === 0)) {
-		if (currentPlayer == 0) {
-			currentPlayer = 1;
-			state[counts[number]][number] = 1;
-			document.getElementById("button" + String.fromCharCode(65 + number) + String.fromCharCode(65 + counts[number])).textContent = "X";
-			counts[number] += 1;
-		} else {
-			currentPlayer = 0;
-			state[counts[number]][number] = 2;
-			document.getElementById("button" + String.fromCharCode(65 + number) + String.fromCharCode(65 + counts[number])).textContent = "O";
-			counts[number] += 1;
-		}
+		state[counts[number]][number] = currentPlayer + 1;
+		currentPlayer = (currentPlayer + 1) % 2;
+		document.getElementById("Buttons").children[6 - counts[number]].children[number].children[0].textContent = player[currentPlayer];
+		counts[number] += 1;
 		++moves;
 		checkState();
 	}
