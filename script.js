@@ -49,11 +49,10 @@ function clickNew() {
 		}
 	}
 	moves = 0;
-	checkState();
+	updateGameState();
 }
 
-function checkState() {
-	document.getElementById("GameStats").textContent = player[currentPlayer + 1] + " to click";
+function checkWinOnColumns() {
 	for (let i = 0; i < 3; ++i) {
 		for (let j = 0; j < 7; ++j) {
 			if (state[i][j] === state[i + 1][j] && state[i][j] === state[i + 2][j] && state[i][j] === state[i + 3][j]) {
@@ -64,6 +63,9 @@ function checkState() {
 			}
 		}
 	}
+}
+
+function checkWinOnRows() {
 	for (let i = 0; i < 6; ++i) {
 		for (let j = 0; j < 4; ++j) {
 			if (state[i][j] === state[i][j + 1] && state[i][j] === state[i][j + 2] && state[i][j] === state[i][j + 3]) {
@@ -74,6 +76,9 @@ function checkState() {
 			}
 		}
 	}
+}
+
+function checkWinOnDiagonals() {
 	for (let i = 0; i < 3; ++i) {
 		for (let j = 0; j < 4; ++j) {
 			if (state[i][j] === state[i + 1][j + 1] && state[i][j] === state[i + 2][j + 2] && state[i][j] === state[i + 3][j + 3]) {
@@ -94,8 +99,19 @@ function checkState() {
 			}
 		}
 	}
+}
+
+function checkDraw() {
 	if ((gameState === 0) && (moves == 42))
 		document.getElementById("GameStats").textContent = "Draw!";
+}
+
+function updateGameState() {
+	document.getElementById("GameStats").textContent = player[currentPlayer + 1] + " to click";
+	checkWinOnColumns();
+	checkWinOnRows();
+	checkWinOnDiagonals();
+	checkDraw();
 }
 
 function buttonClicked(number) {
@@ -105,6 +121,6 @@ function buttonClicked(number) {
 		document.getElementById("Buttons").children[6 - counts[number]].children[number].children[0].textContent = player[currentPlayer];
 		counts[number] += 1;
 		++moves;
-		checkState();
+		updateGameState();
 	}
 }
