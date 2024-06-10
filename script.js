@@ -20,7 +20,6 @@ function start() {
 			let currenttd = document.createElement("td");
 			let button = document.createElement("button");
 			button.setAttribute("buttonid", j);
-			button.setAttribute("style", "height:40px;width:40px;font-family:Arial;font-size:18px;");
 			if (i > 0) {
 				button.innerHTML = " ";
 			} else {
